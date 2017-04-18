@@ -180,6 +180,7 @@ def main(_):
 		train_image_files = glob('./Data/JPEGImages/*.jpg')
 		print(len(train_image_files))
 		batch_idxs = len(train_image_files)/batch_size
+		cnt=0
 		for epoch in range(n_epochs):
 			for idx in xrange(0, batch_idxs):
 				batch_files = train_image_files[idx*batch_size:(idx+1)*batch_size]
@@ -194,12 +195,17 @@ def main(_):
 				
 				sess.run(train_op, feed_dict=feed_dict)
 				
-				if idx % 1000 == 0:
+				if cnt % 10 == 0:
 					train_loss = sess.run(loss, feed_dict=feed_dict)
-					print("Step: %d, Train_loss:%g" % (idx, train_loss))
-					saver.save(sess, 'logs/' +str(epoch), idx)
+					print("Step: %d, Train_loss:%g" % (cnt, train_loss))
+				
+				if cnt % 1000 == 0:
+					train_loss = sess.run(loss, feed_dict=feed_dict)
+					#print("Step: %d, Train_loss:%g" % (cnt, train_loss))
+					saver.save(sess, 'logs/' +str(epoch), cnt)
 					#summary_writer.add_summary(summary_str, idx)
 					#break
+				cnt +=1
 	
 
 		
